@@ -1,5 +1,9 @@
 const { validateRegister } = require("../validators/auth.validator");
-const { registerUser } = require("../services/auth.service");
+
+const {
+  registerUser,
+  loginUser,
+} = require("../services/auth.service");
 
 const asyncHandler = require("../utils/async-handler");
 const AppError = require("../errors/app-error");
@@ -25,6 +29,18 @@ const register = asyncHandler(async (req, res) => {
 
 });
 
+const login = asyncHandler(async (req, res) => {
+
+  const token = await loginUser(req.body);
+
+  res.status(httpStatus.OK).json({
+    message: "Login successful",
+    data: token,
+  });
+
+});
+
 module.exports = {
   register,
+  login,
 };
