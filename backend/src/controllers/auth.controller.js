@@ -1,34 +1,29 @@
 const { validateRegister } = require("../validators/auth.validator");
 const { registerUser } = require("../services/auth.service");
 
-const register = async (req, res) => {
+const asyncHandler = require("../utils/async-handler");
+const AppError = require("../errors/app-error");
+const httpStatus = require("../constants/http-status");
 
-  try {
+const register = asyncHandler(async (req, res) => {
 
-    const error = validateRegister(req.body);
+  const error = validateRegister(req.body);
 
-    if (error) {
-      return res.status(400).json({
-        message: error,
-      });
-    }
-
-    const user = await registerUser(req.body);
-
-    res.status(201).json({
-      message: "User created successfully",
-      data: user,
-    });
-
-  } catch (error) {
-
-    res.status(409).json({
-      message: error.message,
-    });
-
+  if (error) {
+    throw new AppError(
+      error,
+      httpStatus.BAD_REQUEST
+    );
   }
 
-};
+  const user = await registerUser(req.body);
+
+  res.status(httpStatus.CREATED).json({
+    message: "User created successfully",
+    data: user,
+  });
+
+});
 
 module.exports = {
   register,
