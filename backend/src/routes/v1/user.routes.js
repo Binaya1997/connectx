@@ -1,26 +1,21 @@
-const express =
-  require("express");
+const express = require("express");
 
-const router =
-  express.Router();
+const router = express.Router();
 
-const authMiddleware =
-  require("../../middleware/auth.middleware");
+const authMiddleware = require(
+  "../../middleware/auth.middleware"
+);
+
+const {
+  getMe,
+} = require(
+  "../../controllers/user.controller"
+);
 
 router.get(
   "/me",
   authMiddleware,
-  (req, res) => {
-
-    res.json({
-      message:
-        "Protected route",
-      user:
-        req.user,
-    });
-
-  }
+  getMe
 );
 
-module.exports =
-  router;
+module.exports = router;
