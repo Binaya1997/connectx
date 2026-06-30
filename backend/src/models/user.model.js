@@ -51,6 +51,48 @@ const createUser = async ({ name, email, password }) => {
   return result.rows[0];
 };
 
+
+const updateUserProfile =
+  async (id, data) => {
+
+    const {
+      username,
+      bio,
+    } = data;
+
+    const query = `
+      UPDATE users
+      SET
+        username = $1,
+        bio = $2,
+        updated_at = NOW()
+      WHERE id = $3
+      RETURNING
+        id,
+        name,
+        email,
+        username,
+        bio,
+        avatar_url,
+        created_at,
+        updated_at
+    `;
+
+    const result =
+      await pool.query(
+        query,
+        [
+          username,
+          bio,
+          id,
+        ]
+      );
+
+    return result.rows[0];
+
+  };
+
+
 module.exports = {
   createUser,
   getUserByEmail,
@@ -60,4 +102,11 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
+};
+
+module.exports = {
+  createUser,
+  getUserByEmail,
+  getUserById,
+  updateUserProfile,
 };

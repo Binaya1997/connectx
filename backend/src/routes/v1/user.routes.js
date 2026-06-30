@@ -8,14 +8,22 @@ const authMiddleware = require(
 
 const {
   getMe,
+  updateMe,
 } = require(
   "../../controllers/user.controller"
 );
+
 
 router.get(
   "/me",
   authMiddleware,
   getMe
+);
+
+router.patch(
+  "/me",
+  authMiddleware,
+  updateMe
 );
 
 module.exports = router;
